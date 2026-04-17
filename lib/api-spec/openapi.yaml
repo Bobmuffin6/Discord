@@ -1,0 +1,293 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: Discord clone API specification
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: channels
+    description: Channel operations
+  - name: messages
+    description: Message operations
+  - name: users
+    description: User operations
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /channels:
+    get:
+      operationId: listChannels
+      tags: [channels]
+      summary: List all channels
+      responses:
+        "200":
+          description: List of channels
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Channel"
+    post:
+      operationId: createChannel
+      tags: [channels]
+      summary: Create a channel
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateChannelBody"
+      responses:
+        "201":
+          description: Created channel
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Channel"
+
+  /channels/{id}:
+    get:
+      operationId: getChannel
+      tags: [channels]
+      summary: Get a channel
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Channel
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Channel"
+        "404":
+          description: Not found
+
+  /channels/{id}/messages:
+    get:
+      operationId: getChannelMessages
+      tags: [messages]
+      summary: Get messages for a channel
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+        - name: before
+          in: query
+          schema:
+            type: ["integer", "null"]
+      responses:
+        "200":
+          description: List of messages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Message"
+    post:
+      operationId: sendMessage
+      tags: [messages]
+      summary: Send a message to a channel
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SendMessageBody"
+      responses:
+        "201":
+          description: Created message
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+
+  /users/me:
+    get:
+      operationId: getMe
+      tags: [users]
+      summary: Get current user profile
+      responses:
+        "200":
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "401":
+          description: Unauthorized
+
+  /users/me/sync:
+    post:
+      operationId: syncMe
+      tags: [users]
+      summary: Sync current user from Clerk to DB
+      responses:
+        "200":
+          description: Synced user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+
+  /channels/{id}/stats:
+    get:
+      operationId: getChannelStats
+      tags: [channels]
+      summary: Get stats for a channel
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Channel stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChannelStats"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+
+    Channel:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - name
+        - createdAt
+
+    CreateChannelBody:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: ["string", "null"]
+      required:
+        - name
+
+    Message:
+      type: object
+      properties:
+        id:
+          type: integer
+        channelId:
+          type: integer
+        content:
+          type: string
+        userId:
+          type: string
+        userName:
+          type: string
+        userAvatar:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - channelId
+        - content
+        - userId
+        - userName
+        - createdAt
+
+    SendMessageBody:
+      type: object
+      properties:
+        content:
+          type: string
+      required:
+        - content
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        clerkId:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        avatar:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - clerkId
+        - name
+        - email
+        - createdAt
+
+    ChannelStats:
+      type: object
+      properties:
+        totalMessages:
+          type: integer
+        totalMembers:
+          type: integer
+        recentMessages:
+          type: integer
+      required:
+        - totalMessages
+        - totalMembers
+        - recentMessages

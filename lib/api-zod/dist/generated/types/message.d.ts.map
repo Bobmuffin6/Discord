@@ -1,0 +1,1 @@
+{"version":3,"file":"message.d.ts","sourceRoot":"","sources":["../../../src/generated/types/message.ts"],"names":[],"mappings":"AAAA;;;;;;GAMG;AAEH,MAAM,WAAW,OAAO;IACtB,EAAE,EAAE,MAAM,CAAC;IACX,SAAS,EAAE,MAAM,CAAC;IAClB,OAAO,EAAE,MAAM,CAAC;IAChB,MAAM,EAAE,MAAM,CAAC;IACf,QAAQ,EAAE,MAAM,CAAC;IACjB,gBAAgB;IAChB,UAAU,CAAC,EAAE,MAAM,GAAG,IAAI,CAAC;IAC3B,SAAS,EAAE,IAAI,CAAC;CACjB"}
