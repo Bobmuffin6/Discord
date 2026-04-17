@@ -7,10 +7,12 @@
     "build:cloudflare": "pnpm --filter @workspace/discord-clone run build",
     "dev:cloudflare": "wrangler pages dev ./artifacts/discord-clone/dist --project-name discord-clone",
     "publish:cloudflare": "wrangler pages publish ./artifacts/discord-clone/dist --project-name discord-clone",
+    "deploy:cloudflare": "sh ./cloudflare-deploy.sh",
     "typecheck": "pnpm -r --if-present run typecheck"
   },
   "private": true,
   "devDependencies": {
-    "typescript": "~5.9.2"
+    "typescript": "~5.9.2",
+    "wrangler": "^4.83.0"
   }
 }

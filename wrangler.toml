@@ -5,4 +5,4 @@ packageManager = "pnpm"
 [build]
   command = "pnpm --filter @workspace/discord-clone run build"
 
-pages_build_output_dir = "./dist"
+pages_build_output_dir = "./artifacts/discord-clone/dist"
