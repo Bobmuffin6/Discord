@@ -1,4 +1,7 @@
 name = "discord-clone"
-pages_build_output_dir = "./dist"
+compatibility_date = "2025-04-17"
 
-[env.production]
+[build]
+  command = "pnpm --filter @workspace/discord-clone run build"
+
+pages_build_output_dir = "./dist"

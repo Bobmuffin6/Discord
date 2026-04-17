@@ -4,6 +4,9 @@
   "license": "MIT",
   "scripts": {
     "build": "pnpm -r --if-present run build",
+    "build:cloudflare": "pnpm --filter @workspace/discord-clone run build",
+    "dev:cloudflare": "wrangler pages dev ./artifacts/discord-clone/dist --project-name discord-clone",
+    "publish:cloudflare": "wrangler pages publish ./artifacts/discord-clone/dist --project-name discord-clone",
     "typecheck": "pnpm -r --if-present run typecheck"
   },
   "private": true,
